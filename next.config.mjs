@@ -14,6 +14,11 @@ const nextConfig = {
         hostname: "plus.unsplash.com",
         pathname: "/**",
       },
+       {
+        protocol: "https",
+        hostname: "images.pexels.com",
+        pathname: "/**",
+      },
     ],
   },
 };
