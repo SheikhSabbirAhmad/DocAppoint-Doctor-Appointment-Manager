@@ -1,0 +1,62 @@
+[
+  {
+    "id": 1,
+    "name": "Cardiologist",
+    "slug": "cardiologist"
+  },
+  {
+    "id": 2,
+    "name": "Dermatologist",
+    "slug": "dermatologist"
+  },
+  {
+    "id": 3,
+    "name": "Gynecologist",
+    "slug": "gynecologist"
+  },
+  {
+    "id": 4,
+    "name": "Orthopedic",
+    "slug": "orthopedic"
+  },
+  {
+    "id": 5,
+    "name": "Pediatrician",
+    "slug": "pediatrician"
+  },
+  {
+    "id": 6,
+    "name": "Neurologist",
+    "slug": "neurologist"
+  },
+  {
+    "id": 7,
+    "name": "ENT Specialist",
+    "slug": "ent-specialist"
+  },
+  {
+    "id": 8,
+    "name": "Psychiatrist",
+    "slug": "psychiatrist"
+  },
+  {
+    "id": 9,
+    "name": "General Physician",
+    "slug": "general-physician"
+  },
+  {
+    "id": 10,
+    "name": "Urologist",
+    "slug": "urologist"
+  },
+  {
+    "id": 11,
+    "name": "Endocrinologist",
+    "slug": "endocrinologist"
+  },
+  {
+    "id": 12,
+    "name": "Oncologist",
+    "slug": "oncologist"
+  }
+]
