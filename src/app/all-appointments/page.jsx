@@ -1,92 +1,105 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Card, Button, Chip } from "@heroui/react";
-import { FaCalendarAlt, FaClock, FaUserMd } from "react-icons/fa";
+import { FaStar, FaMapMarkerAlt, FaRegClock } from "react-icons/fa";
 
-const AllAppointmentsPage = async () => {
+const AllAppointmentsPage = async ({ searchParams }) => {
+  const params = await searchParams;
+  const category = params?.category;
+
   const res = await fetch(
-    "https://doc-appoint-doctor-appointment-mana.vercel.app/appointments.json",
+    "https://doc-appoint-doctor-appointment-mana.vercel.app/data.json",
     { cache: "no-store" }
   );
 
-  const appointments = await res.json();
+  const doctors = await res.json();
+
+  // filter by category (specialty)
+  const filteredDoctors = category
+    ? doctors.filter(
+        (doc) =>
+          doc.specialty?.toLowerCase() === category.toLowerCase()
+      )
+    : doctors;
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-10">
 
       {/* TITLE */}
       <h1 className="text-3xl font-bold text-gray-800 mb-2">
-        All Appointments
+        All Doctors
       </h1>
       <p className="text-gray-500 mb-8">
-        Manage and view all your scheduled doctor appointments.
+        Browse and book appointments with trusted medical specialists.
       </p>
 
       {/* GRID */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
-        {appointments.map((app) => (
+        {filteredDoctors.map((doctor) => (
           <Card
-            key={app.id}
-            className="border rounded-2xl p-4 hover:shadow-xl transition duration-300 bg-white"
+            key={doctor.id}
+            className="group border rounded-2xl p-4 transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 bg-white"
           >
 
-            {/* DOCTOR INFO */}
-            <div className="flex items-center gap-3 mb-4">
-              <div className="relative w-14 h-14 rounded-full overflow-hidden bg-gray-100">
-                <Image
-                  src={app.doctorImage || "/placeholder.png"}
-                  alt={app.doctorName}
-                  fill
-                  className="object-cover"
-                />
+            {/* IMAGE */}
+            <div className="relative w-full h-64 bg-gray-100 rounded-xl overflow-hidden">
+              <Image
+                src={doctor.image || "/placeholder.png"}
+                alt={doctor.name}
+                fill
+                className="object-cover transition-transform duration-500 group-hover:scale-110"
+              />
+
+              {/* RATING */}
+              <div className="absolute top-3 right-3 bg-white px-2 py-1 rounded-full flex items-center gap-1 shadow-md">
+                <FaStar className="text-yellow-500 text-sm" />
+                <span className="text-sm font-semibold">
+                  {doctor.rating}
+                </span>
               </div>
 
-              <div>
-                <h2 className="font-semibold text-lg text-gray-800">
-                  {app.doctorName}
-                </h2>
-                <p className="text-sm text-gray-500 flex items-center gap-1">
-                  <FaUserMd /> {app.specialty}
-                </p>
-              </div>
-            </div>
-
-            {/* APPOINTMENT DETAILS */}
-            <div className="space-y-2 text-sm text-gray-600">
-
-              <div className="flex items-center gap-2">
-                <FaCalendarAlt className="text-emerald-500" />
-                <span>{app.date}</span>
-              </div>
-
-              <div className="flex items-center gap-2">
-                <FaClock className="text-emerald-500" />
-                <span>{app.time}</span>
-              </div>
-
-            </div>
-
-            {/* STATUS */}
-            <div className="mt-4">
-              <Chip
-                className={
-                  app.status === "confirmed"
-                    ? "bg-green-100 text-green-700"
-                    : app.status === "pending"
-                    ? "bg-yellow-100 text-yellow-700"
-                    : "bg-red-100 text-red-700"
-                }
-              >
-                {app.status}
+              {/* SPECIALTY */}
+              <Chip className="absolute bottom-3 left-3 bg-black/70 text-white">
+                {doctor.specialty}
               </Chip>
             </div>
 
-            {/* ACTION */}
-            <div className="mt-4 flex justify-end">
-              <Link href={`/appointments/${app.id}`}>
-                <Button className="bg-emerald-600 text-white hover:bg-emerald-700">
-                  View Details
+            {/* INFO */}
+            <div className="mt-4 space-y-1">
+              <h2 className="text-xl font-bold group-hover:text-emerald-600 transition">
+                {doctor.name}
+              </h2>
+
+              <p className="text-sm text-gray-500 line-clamp-2">
+                {doctor.description}
+              </p>
+            </div>
+
+            {/* LOCATION + EXPERIENCE */}
+            <div className="mt-3 space-y-2 text-sm text-gray-600">
+
+              <div className="flex items-center gap-2">
+                <FaMapMarkerAlt className="text-emerald-500" />
+                <span>{doctor.location}</span>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <FaRegClock className="text-emerald-500" />
+                <span>{doctor.experience} experience</span>
+              </div>
+
+            </div>
+
+            {/* FEE + BUTTON */}
+            <div className="flex items-center justify-between mt-4">
+              <p className="text-lg font-bold text-emerald-600">
+                ৳{doctor.fee}
+              </p>
+
+              <Link href={`/doctors/${doctor.id}`}>
+                <Button className="bg-emerald-600 text-white hover:bg-emerald-700 transition">
+                  Book Appointment
                 </Button>
               </Link>
             </div>
