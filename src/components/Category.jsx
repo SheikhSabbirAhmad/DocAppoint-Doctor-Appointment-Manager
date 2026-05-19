@@ -10,76 +10,48 @@ const Category = () => {
   const activeCategory = searchParams.get("category");
 
   const [categories, setCategories] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchCategories = async () => {
-      try {
-        setLoading(true);
-
-        const res = await fetch(
-          "https://doc-appoint-doctor-appointment-mana.vercel.app/category.json"
-        );
-
-        if (!res.ok) {
-          throw new Error("Failed to fetch categories");
-        }
-
-        const data = await res.json();
-        setCategories(data);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
+      const res = await fetch(
+        "https://doc-appoint-doctor-appointment-mana.vercel.app/category.json"
+      );
+      const data = await res.json();
+      setCategories(data);
     };
 
     fetchCategories();
   }, []);
 
   return (
-    <div className="flex flex-wrap gap-3 mb-6">
-
-      {/* ALL BUTTON */}
-      <Link href="/products">
+    <div className="flex flex-wrap justify-center gap-3 mb-10">
+      <Link href="/all-appointments">
         <Button
           size="sm"
-          className={`transition-all duration-300 px-4 py-2 rounded-full ${
+          className={`px-4 py-2 rounded-full transition-all ${
             !activeCategory
-              ? "bg-emerald-600 text-white scale-105 shadow-md"
-              : "bg-white text-gray-700 border hover:bg-gray-100"
+              ? "bg-emerald-600 text-white scale-105 shadow"
+              : "bg-white border text-gray-700 hover:bg-gray-100"
           }`}
         >
           All
         </Button>
       </Link>
 
-      {/* LOADING STATE */}
-      {loading && (
-        <p className="text-sm text-gray-400">Loading categories...</p>
-      )}
-
-      {/* ERROR STATE */}
-      {error && (
-        <p className="text-sm text-red-500">{error}</p>
-      )}
-
-      {/* CATEGORY LIST */}
       {categories.map((category) => {
         const isActive = activeCategory === category.slug;
 
         return (
           <Link
             key={category.id}
-            href={`/products?category=${category.slug}`}
+            href={`/all-appointments?category=${category.slug}`}
           >
             <Button
               size="sm"
-              className={`transition-all duration-300 px-4 py-2 rounded-full ${
+              className={`px-4 py-2 rounded-full transition-all ${
                 isActive
-                  ? "bg-emerald-600 text-white scale-105 shadow-md"
-                  : "bg-white text-gray-700 border hover:bg-gray-100"
+                  ? "bg-emerald-600 text-white scale-105 shadow"
+                  : "bg-white border text-gray-700 hover:bg-gray-100"
               }`}
             >
               {category.name}

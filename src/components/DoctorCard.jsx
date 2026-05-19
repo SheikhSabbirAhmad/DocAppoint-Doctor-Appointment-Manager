@@ -14,7 +14,7 @@ const DoctorCard = ({ doctor }) => {
   return (
     <Card className="group border rounded-2xl p-4 transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 bg-white">
 
-      {/* IMAGE SECTION */}
+      {/* IMAGE */}
       <div className="relative w-full h-64 bg-gray-100 rounded-xl overflow-hidden">
         <Image
           src={imageSrc}
@@ -23,19 +23,21 @@ const DoctorCard = ({ doctor }) => {
           className="object-cover transition-transform duration-500 group-hover:scale-110"
         />
 
-        {/* Rating Badge */}
+        {/* Rating */}
         <div className="absolute top-3 right-3 bg-white px-2 py-1 rounded-full flex items-center gap-1 shadow-md">
           <FaStar className="text-yellow-500 text-sm" />
-          <span className="text-sm font-semibold">{doctor.rating}</span>
+          <span className="text-sm font-semibold">
+            {doctor.rating}
+          </span>
         </div>
 
-        {/* Specialty Badge */}
+        {/* Specialty */}
         <Chip className="absolute bottom-3 left-3 bg-black/70 text-white">
           {doctor.specialty}
         </Chip>
       </div>
 
-      {/* INFO SECTION */}
+      {/* INFO */}
       <div className="mt-4 space-y-1">
         <h2 className="text-xl font-bold group-hover:text-emerald-600 transition">
           {doctor.name}
@@ -48,6 +50,7 @@ const DoctorCard = ({ doctor }) => {
 
       {/* LOCATION + EXPERIENCE */}
       <div className="mt-3 space-y-2 text-sm text-gray-600">
+
         <div className="flex items-center gap-2">
           <FaMapMarkerAlt className="text-emerald-500" />
           <span>{doctor.location}</span>
@@ -57,10 +60,12 @@ const DoctorCard = ({ doctor }) => {
           <FaRegClock className="text-emerald-500" />
           <span>{doctor.experience} experience</span>
         </div>
+
       </div>
 
       {/* FEE + BUTTON */}
       <div className="flex items-center justify-between mt-4">
+
         <p className="text-lg font-bold text-emerald-600">
           ৳{doctor.fee}
         </p>
@@ -70,7 +75,9 @@ const DoctorCard = ({ doctor }) => {
             View Details
           </Button>
         </Link>
+
       </div>
+
     </Card>
   );
 };
