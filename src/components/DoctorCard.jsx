@@ -1,7 +1,10 @@
+"use client"
+
 import Image from "next/image";
 import Link from "next/link";
 import { Card, Button, Chip } from "@heroui/react";
 import { FaStar, FaMapMarkerAlt, FaRegClock } from "react-icons/fa";
+import { authClient } from "@/lib/auth-client";
 
 const DoctorCard = ({ doctor }) => {
   if (!doctor) return null;
