@@ -70,7 +70,7 @@ const DoctorCard = ({ doctor }) => {
           ৳{doctor.fee}
         </p>
 
-        <Link href={`/doctors/${doctor.id}`}>
+        <Link href={`/all-appointments/${doctor.id}`}>
           <Button className="bg-emerald-600 text-white hover:bg-emerald-700 transition">
             View Details
           </Button>

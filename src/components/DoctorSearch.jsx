@@ -36,7 +36,7 @@ const DoctorSearch = () => {
         <input
           type="text"
           placeholder="Search by doctor name or specialty..."
-          className="w-full pl-10 pr-4 py-3 rounded-full border border-gray-200 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+          className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
