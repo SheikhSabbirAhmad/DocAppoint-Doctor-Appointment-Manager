@@ -45,7 +45,10 @@ const BookAppointmentModal = ({
     };
   }, [isOpen]);
 
-  const handleSubmit = () => {
+  // FORM SUBMIT
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
     if (!patientName || !gender || !phone || !date || !time) {
       alert("Please fill all required fields");
       return;
@@ -64,12 +67,37 @@ const BookAppointmentModal = ({
       fee: doctor?.fee,
       hospital: doctor?.hospital,
       location: doctor?.location,
+      createdAt: new Date(),
     };
 
-    onSubmit?.(bookingData);
+    try {
 
-    resetForm();
-    onOpenChange(false);
+      // API CALL
+      const res = await fetch("http://localhost:5000/booking", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(bookingData),
+      });
+
+      const data = await res.json();
+
+      console.log(data);
+
+      if (data.insertedId) {
+        alert("Appointment booked successfully!");
+
+        onSubmit?.(bookingData);
+
+        resetForm();
+        onOpenChange(false);
+      }
+
+    } catch (error) {
+      console.log(error);
+      alert("Something went wrong!");
+    }
   };
 
   if (!isOpen) return null;
@@ -100,7 +128,7 @@ const BookAppointmentModal = ({
         </div>
 
         {/* FORM */}
-        <div className="space-y-3">
+        <form onSubmit={handleSubmit} className="space-y-3">
 
           {/* USER EMAIL */}
           <div>
@@ -224,13 +252,13 @@ const BookAppointmentModal = ({
 
           {/* BUTTON */}
           <button
-            onClick={handleSubmit}
+            type="submit"
             className="w-full h-[46px] sm:h-[50px] rounded-lg bg-gradient-to-r from-cyan-700 to-cyan-500 text-white text-sm sm:text-base font-semibold hover:opacity-90 transition cursor-pointer"
           >
             Confirm Booking
           </button>
 
-        </div>
+        </form>
       </div>
     </div>
   );
