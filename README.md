@@ -34,13 +34,13 @@ The project focuses on:
 ## 🌍 Client Side
 
 ```bash
-https://your-client-site-url.com
+https://doc-appoint-doctor-appointment-mana.vercel.app
 ```
 
 ## 🌍 Server Side
 
 ```bash
-https://your-server-site-url.com
+https://doc-appoint-server-two.vercel.app
 ```
 
 ---
