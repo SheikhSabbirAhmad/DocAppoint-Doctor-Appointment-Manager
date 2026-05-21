@@ -18,10 +18,10 @@ const TopRatedDoc = async () => {
 
         {/* Title */}
         <div className="text-center mb-12">
-          <h1 className="text-3xl sm:text-4xl font-bold text-gray-800">
+          <h1 className="text-3xl sm:text-5xl font-bold text-slate-900">
             Top Rated Doctors
           </h1>
-          <p className="text-gray-500 mt-2">
+          <p className="mt-5 text-slate-500 text-base md:text-lg leading-8">
             Trusted medical professionals with exceptional patient care.
           </p>
         </div>
