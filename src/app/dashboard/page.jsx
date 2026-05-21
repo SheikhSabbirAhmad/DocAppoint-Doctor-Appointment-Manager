@@ -31,7 +31,7 @@ const DashboardPage = () => {
       const tokenRes = await authClient.token();
       const token = tokenRes?.data?.token;
 
-      const res = await fetch("http://localhost:5000/booking", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/booking`, {
         headers: {
           authorization: `Bearer ${token}`,
         },
@@ -56,7 +56,7 @@ const DashboardPage = () => {
       const token = tokenRes?.data?.token;
 
       const res = await fetch(
-        `http://localhost:5000/booking/${id}`,
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/booking/${id}`,
         {
           method: "DELETE",
           headers: {

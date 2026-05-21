@@ -54,12 +54,11 @@ const UpdateBookingModal = ({ booking }) => {
     };
 
     try {
-      // ✅ FIX: always fresh token (VERY IMPORTANT)
       const tokenRes = await authClient.token();
       const token = tokenRes?.data?.token;
 
       const res = await fetch(
-        `http://localhost:5000/booking/${booking._id}`,
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/booking/${booking._id}`,
         {
           method: "PATCH",
           headers: {
