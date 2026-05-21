@@ -10,8 +10,8 @@ import {
 } from "@heroui/react";
 
 import { Pencil } from "lucide-react";
-
 import { toast } from "sonner";
+import { authClient } from "@/lib/auth-client";
 
 const UpdateBookingModal = ({ booking }) => {
   // TIME FIX
@@ -27,7 +27,6 @@ const UpdateBookingModal = ({ booking }) => {
     }
 
     const [clock, modifier] = time.split(" ");
-
     let [hours, minutes] = clock.split(":");
 
     if (hours === "12") {
@@ -55,12 +54,17 @@ const UpdateBookingModal = ({ booking }) => {
     };
 
     try {
+      // ✅ FIX: always fresh token (VERY IMPORTANT)
+      const tokenRes = await authClient.token();
+      const token = tokenRes?.data?.token;
+
       const res = await fetch(
         `http://localhost:5000/booking/${booking._id}`,
         {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
+            authorization: `Bearer ${token}`,
           },
           body: JSON.stringify(updatedBooking),
         }
@@ -68,27 +72,26 @@ const UpdateBookingModal = ({ booking }) => {
 
       const data = await res.json();
 
-      console.log(data);
+      console.log("UPDATE RESPONSE:", data);
 
       if (data.modifiedCount > 0) {
-        toast.success(
-          "Appointment updated successfully!",
-          {
-            style: {
-              background: "#ecfeff",
-              color: "#0f172a",
-              border: "1px solid #a5f3fc",
-              borderRadius: "14px",
-            },
-          }
-        );
+        toast.success("Appointment updated successfully!", {
+          style: {
+            background: "#ecfeff",
+            color: "#0f172a",
+            border: "1px solid #a5f3fc",
+            borderRadius: "14px",
+          },
+        });
 
         setTimeout(() => {
           window.location.reload();
-        }, 600);
+        }, 800);
+      } else {
+        toast.error("No changes were made!");
       }
     } catch (error) {
-      console.log(error);
+      console.log("UPDATE ERROR:", error);
 
       toast.error("Something went wrong!", {
         style: {
@@ -127,20 +130,12 @@ const UpdateBookingModal = ({ booking }) => {
 
             {/* BODY */}
             <Modal.Body>
-              <Surface
-                variant="default"
-                className="border-none shadow-none"
-              >
-                <form
-                  onSubmit={handleUpdate}
-                  className="flex flex-col gap-5"
-                >
+              <Surface variant="default" className="border-none shadow-none">
+                <form onSubmit={handleUpdate} className="flex flex-col gap-5">
+
                   {/* Doctor */}
                   <TextField className="w-full">
-                    <Label className="mb-2 font-semibold">
-                      Doctor
-                    </Label>
-
+                    <Label className="mb-2 font-semibold">Doctor</Label>
                     <Input
                       name="doctorName"
                       value={booking.doctorName}
@@ -152,23 +147,18 @@ const UpdateBookingModal = ({ booking }) => {
 
                   {/* Patient */}
                   <TextField className="w-full">
-                    <Label className="mb-2 font-semibold">
-                      Patient Name
-                    </Label>
-
+                    <Label className="mb-2 font-semibold">Patient Name</Label>
                     <Input
                       name="patientName"
                       defaultValue={booking.patientName}
+                      placeholder="Patient full name"
                     />
                   </TextField>
 
                   {/* DATE + TIME */}
                   <div className="grid md:grid-cols-2 gap-4">
                     <TextField className="w-full">
-                      <Label className="mb-2 font-semibold">
-                        Date
-                      </Label>
-
+                      <Label className="mb-2 font-semibold">Date</Label>
                       <Input
                         type="date"
                         name="date"
@@ -177,29 +167,22 @@ const UpdateBookingModal = ({ booking }) => {
                     </TextField>
 
                     <TextField className="w-full">
-                      <Label className="mb-2 font-semibold">
-                        Time
-                      </Label>
-
+                      <Label className="mb-2 font-semibold">Time</Label>
                       <Input
                         type="time"
                         name="time"
-                        defaultValue={formatTime(
-                          booking.time
-                        )}
+                        defaultValue={formatTime(booking.time)}
                       />
                     </TextField>
                   </div>
 
                   {/* Reason */}
                   <TextField className="w-full">
-                    <Label className="mb-2 font-semibold">
-                      Reason
-                    </Label>
-
+                    <Label className="mb-2 font-semibold">Reason (Optional)</Label>
                     <Input
                       name="reason"
                       defaultValue={booking.reason}
+                      placeholder="Brief reason for visit"
                     />
                   </TextField>
 
@@ -207,12 +190,12 @@ const UpdateBookingModal = ({ booking }) => {
                   <Modal.Footer className="px-0">
                     <Button
                       type="submit"
-                      slot="close"
                       className="w-full bg-teal-600 hover:bg-teal-700 text-white h-12 rounded-xl"
                     >
                       Save Changes
                     </Button>
                   </Modal.Footer>
+
                 </form>
               </Surface>
             </Modal.Body>

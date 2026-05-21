@@ -1,8 +1,7 @@
-// app/dashboard/page.jsx
-
 "use client";
 
 import { useEffect, useState } from "react";
+import { authClient } from "@/lib/auth-client";
 
 import {
   CalendarDays,
@@ -15,33 +14,32 @@ import {
 } from "lucide-react";
 
 import Link from "next/link";
-
-import {
-  Modal,
-  Button,
-} from "@heroui/react";
-
+import { Modal, Button } from "@heroui/react";
 import { toast, Toaster } from "sonner";
 
 import UpdateBookingModal from "@/components/UpdateBookingModal";
 
 const DashboardPage = () => {
   const [bookings, setBookings] = useState([]);
-  const [selectedBooking, setSelectedBooking] =
-    useState(null);
+  const [selectedBooking, setSelectedBooking] = useState(null);
 
-  // GET BOOKINGS
+  //GET BOOKINGS (TOKEN FIXED)
   const fetchBookings = async () => {
     try {
-      const res = await fetch(
-        "http://localhost:5000/booking"
-      );
+      const tokenRes = await authClient.token();
+      const token = tokenRes?.data?.token;
+
+      const res = await fetch("http://localhost:5000/booking", {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      });
 
       const data = await res.json();
-
       setBookings(data);
     } catch (error) {
       console.log(error);
+      toast.error("Failed to load bookings!");
     }
   };
 
@@ -49,41 +47,39 @@ const DashboardPage = () => {
     fetchBookings();
   }, []);
 
-  // DELETE BOOKING
+  //DELETE BOOKING (TOKEN FIXED)
   const handleDelete = async (id) => {
     try {
+      const tokenRes = await authClient.token();
+      const token = tokenRes?.data?.token;
+
       const res = await fetch(
         `http://localhost:5000/booking/${id}`,
         {
           method: "DELETE",
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
         }
       );
 
       const data = await res.json();
 
-      console.log(data);
-
       if (data.deletedCount > 0) {
-        // UI UPDATE WITHOUT RELOAD
         const remainingBookings = bookings.filter(
           (booking) => booking._id !== id
         );
 
         setBookings(remainingBookings);
-
         setSelectedBooking(null);
 
-        // SUCCESS TOAST
-        toast.success(
-          "Appointment deleted successfully!",
-          {
-            style: {
-              background: "#f8fafc",
-              color: "#0f172a",
-              border: "1px solid #e2e8f0",
-            },
-          }
-        );
+        toast.success("Appointment deleted successfully!", {
+          style: {
+            background: "#f8fafc",
+            color: "#0f172a",
+            border: "1px solid #e2e8f0",
+          },
+        });
       }
     } catch (error) {
       console.log(error);
@@ -98,28 +94,10 @@ const DashboardPage = () => {
     }
   };
 
-  // UPDATE TOAST
-  const handleUpdateToast = () => {
-    toast.success(
-      "Appointment updated successfully!",
-      {
-        style: {
-          background: "#f8fafc",
-          color: "#0f172a",
-          border: "1px solid #e2e8f0",
-        },
-      }
-    );
-  };
-
   return (
     <div className="bg-gray-100 min-h-screen py-10">
-      {/* TOASTER */}
-      <Toaster
-        position="top-right"
-        richColors
-        closeButton
-      />
+      {/*TOASTER */}
+      <Toaster position="top-right" richColors closeButton />
 
       <div className="max-w-6xl mx-auto px-4">
         {/* Title */}
@@ -154,7 +132,6 @@ const DashboardPage = () => {
                 <h2 className="text-2xl font-bold text-teal-700">
                   {booking.doctorName}
                 </h2>
-
                 <p className="text-sm text-gray-500 mt-1">
                   {booking.specialty}
                 </p>
@@ -164,8 +141,7 @@ const DashboardPage = () => {
               <div className="space-y-3 text-gray-700">
                 <p className="flex items-center gap-3">
                   <User size={18} />
-                  Patient: {booking.patientName} (
-                  {booking.gender})
+                  Patient: {booking.patientName} ({booking.gender})
                 </p>
 
                 <p className="flex items-center gap-3">
@@ -189,52 +165,38 @@ const DashboardPage = () => {
                 </p>
 
                 <p>
-                  <span className="font-medium">
-                    Reason:
-                  </span>{" "}
+                  <span className="font-medium">Reason:</span>{" "}
                   {booking.reason}
                 </p>
 
                 <p>
-                  <span className="font-medium">
-                    Fee:
-                  </span>{" "}
-                  ৳{booking.fee}
+                  <span className="font-medium">Fee:</span> ৳{booking.fee}
                 </p>
               </div>
 
               {/* Buttons */}
               <div className="flex gap-3 mt-6">
-                {/* UPDATE BUTTON */}
-                <div
-                  onClick={handleUpdateToast}
-                >
-                  <UpdateBookingModal
-                    booking={booking}
-                  />
-                </div>
 
-                {/* DELETE MODAL */}
+                {/*UPDATE (REMOVE WRONG WRAPPER) */}
+                <UpdateBookingModal booking={booking} />
+
+                {/* DELETE */}
                 <Modal>
                   <Button
-                    onClick={() =>
-                      setSelectedBooking(booking)
-                    }
+                    onClick={() => setSelectedBooking(booking)}
                     className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-red-500 text-white hover:bg-red-600 transition"
                   >
                     <Trash2 size={16} />
                     Delete
                   </Button>
 
-                  {selectedBooking?._id ===
-                    booking._id && (
+                  {selectedBooking?._id === booking._id && (
                     <Modal.Backdrop className="bg-black/40 backdrop-blur-sm">
                       <Modal.Container placement="center">
                         <Modal.Dialog className="max-w-md rounded-3xl bg-white p-2 shadow-2xl">
                           <Modal.CloseTrigger />
 
                           <Modal.Body className="py-8 flex flex-col items-center text-center">
-                            {/* ICON */}
                             <div className="w-20 h-20 rounded-full bg-red-100 flex items-center justify-center mb-5">
                               <TriangleAlert
                                 size={40}
@@ -242,20 +204,14 @@ const DashboardPage = () => {
                               />
                             </div>
 
-                            {/* TITLE */}
                             <h2 className="text-2xl font-bold text-gray-900">
                               Delete Booking?
                             </h2>
 
-                            {/* TEXT */}
-                            <p className="text-gray-500 mt-3 leading-relaxed">
-                              This action cannot be
-                              undone. Your appointment
-                              booking will be permanently
-                              removed.
+                            <p className="text-gray-500 mt-3">
+                              This action cannot be undone.
                             </p>
 
-                            {/* BUTTONS */}
                             <div className="flex gap-3 w-full mt-8">
                               <Button
                                 slot="close"
@@ -268,11 +224,9 @@ const DashboardPage = () => {
                               <Button
                                 slot="close"
                                 onClick={() =>
-                                  handleDelete(
-                                    booking._id
-                                  )
+                                  handleDelete(booking._id)
                                 }
-                                className="w-full h-12 rounded-xl bg-red-500 hover:bg-red-600 text-white"
+                                className="w-full h-12 rounded-xl bg-red-500 text-white"
                               >
                                 Delete
                               </Button>
