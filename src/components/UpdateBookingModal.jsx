@@ -11,6 +11,8 @@ import {
 
 import { Pencil } from "lucide-react";
 
+import { toast } from "sonner";
+
 const UpdateBookingModal = ({ booking }) => {
   // TIME FIX
   const formatTime = (time) => {
@@ -45,9 +47,7 @@ const UpdateBookingModal = ({ booking }) => {
     const form = e.target;
 
     const updatedBooking = {
-      // doctor change hobe na
       doctorName: booking.doctorName,
-
       patientName: form.patientName.value,
       date: form.date.value,
       time: form.time.value,
@@ -71,12 +71,33 @@ const UpdateBookingModal = ({ booking }) => {
       console.log(data);
 
       if (data.modifiedCount > 0) {
-        alert("Booking Updated Successfully");
+        toast.success(
+          "Appointment updated successfully!",
+          {
+            style: {
+              background: "#ecfeff",
+              color: "#0f172a",
+              border: "1px solid #a5f3fc",
+              borderRadius: "14px",
+            },
+          }
+        );
 
-        window.location.reload();
+        setTimeout(() => {
+          window.location.reload();
+        }, 600);
       }
     } catch (error) {
       console.log(error);
+
+      toast.error("Something went wrong!", {
+        style: {
+          background: "#fef2f2",
+          color: "#991b1b",
+          border: "1px solid #fecaca",
+          borderRadius: "14px",
+        },
+      });
     }
   };
 
@@ -125,7 +146,6 @@ const UpdateBookingModal = ({ booking }) => {
                       value={booking.doctorName}
                       readOnly
                       disabled
-                      placeholder="Doctor Name"
                       className="cursor-not-allowed opacity-70"
                     />
                   </TextField>
@@ -139,7 +159,6 @@ const UpdateBookingModal = ({ booking }) => {
                     <Input
                       name="patientName"
                       defaultValue={booking.patientName}
-                      placeholder="Patient Name"
                     />
                   </TextField>
 
@@ -165,7 +184,9 @@ const UpdateBookingModal = ({ booking }) => {
                       <Input
                         type="time"
                         name="time"
-                        defaultValue={formatTime(booking.time)}
+                        defaultValue={formatTime(
+                          booking.time
+                        )}
                       />
                     </TextField>
                   </div>
@@ -179,7 +200,6 @@ const UpdateBookingModal = ({ booking }) => {
                     <Input
                       name="reason"
                       defaultValue={booking.reason}
-                      placeholder="Reason"
                     />
                   </TextField>
 

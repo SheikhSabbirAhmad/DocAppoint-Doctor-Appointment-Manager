@@ -3,35 +3,45 @@
 import { authClient } from "@/lib/auth-client";
 import { Button, Input, Label, Modal, Surface, TextField } from "@heroui/react";
 import { BiEdit, BiUser } from "react-icons/bi";
+import { toast } from "react-toastify";
 
 export function UpdateUserModal() {
   const onSubmit = async (e) => {
     e.preventDefault();
+
     const name = e.target.name.value;
     const image = e.target.image.value;
 
-    await authClient.updateUser({
+    try {
+      await authClient.updateUser({
         name,
-        image
-    })
+        image,
+      });
 
-    
+      toast.success("Profile updated successfully!");
+    } catch (error) {
+      toast.error("Something went wrong!");
+    }
   };
+
   return (
     <Modal>
       <Button variant="secondary">
         <BiEdit /> Update Profile
       </Button>
+
       <Modal.Backdrop>
         <Modal.Container placement="auto">
           <Modal.Dialog className="sm:max-w-md">
             <Modal.CloseTrigger />
+
             <Modal.Header>
               <Modal.Icon className="bg-accent-soft text-accent-soft-foreground">
                 <BiUser className="size-5" />
               </Modal.Icon>
               <Modal.Heading>Update User</Modal.Heading>
             </Modal.Header>
+
             <Modal.Body className="p-6">
               <Surface variant="default">
                 <form onSubmit={onSubmit} className="flex flex-col gap-4">
@@ -39,6 +49,7 @@ export function UpdateUserModal() {
                     <Label>Name</Label>
                     <Input placeholder="Enter your name" />
                   </TextField>
+
                   <TextField className="w-full" name="image" type="url">
                     <Label>Image URL</Label>
                     <Input placeholder="Image URL" />
@@ -48,7 +59,10 @@ export function UpdateUserModal() {
                     <Button slot="close" variant="secondary">
                       Cancel
                     </Button>
-                    <Button type="submit" slot="close">Save</Button>
+
+                    <Button type="submit" slot="close">
+                      Save
+                    </Button>
                   </Modal.Footer>
                 </form>
               </Surface>

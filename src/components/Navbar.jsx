@@ -79,9 +79,11 @@ const Navbar = () => {
             height={40}
             className="rounded-md"
           />
-          <h2 className="font-bold text-3xl text-[#0f766e]">
+       <Link href={"/"}>
+             <h2 className="font-bold text-3xl text-[#0f766e]">
             DocAppoint
           </h2>
+       </Link>
         </div>
 
         {/* Desktop Menu */}

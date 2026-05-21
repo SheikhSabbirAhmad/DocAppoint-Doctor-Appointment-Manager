@@ -37,11 +37,11 @@ const AllAppointmentsPage = async ({ searchParams }) => {
   return (
     <div className="max-w-7xl mx-auto px-4 py-10">
 
-      <h1 className="text-4xl font-bold text-center text-gray-800">
+      <h1 className="text-3xl sm:text-5xl font-bold text-slate-900 text-center">
         All Appointments
       </h1>
 
-      <p className="text-center text-gray-500 mt-2 mb-8">
+      <p className="mt-3 text-slate-500 text-base md:text-lg leading-8 mb-8 text-center">
         Browse and book appointments with trusted medical specialists.
       </p>
 

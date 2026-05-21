@@ -21,6 +21,8 @@ import {
   Button,
 } from "@heroui/react";
 
+import { toast, Toaster } from "sonner";
+
 import UpdateBookingModal from "@/components/UpdateBookingModal";
 
 const DashboardPage = () => {
@@ -70,17 +72,58 @@ const DashboardPage = () => {
         setBookings(remainingBookings);
 
         setSelectedBooking(null);
+
+        // SUCCESS TOAST
+        toast.success(
+          "Appointment deleted successfully!",
+          {
+            style: {
+              background: "#f8fafc",
+              color: "#0f172a",
+              border: "1px solid #e2e8f0",
+            },
+          }
+        );
       }
     } catch (error) {
       console.log(error);
+
+      toast.error("Something went wrong!", {
+        style: {
+          background: "#fef2f2",
+          color: "#991b1b",
+          border: "1px solid #fecaca",
+        },
+      });
     }
+  };
+
+  // UPDATE TOAST
+  const handleUpdateToast = () => {
+    toast.success(
+      "Appointment updated successfully!",
+      {
+        style: {
+          background: "#f8fafc",
+          color: "#0f172a",
+          border: "1px solid #e2e8f0",
+        },
+      }
+    );
   };
 
   return (
     <div className="bg-gray-100 min-h-screen py-10">
+      {/* TOASTER */}
+      <Toaster
+        position="top-right"
+        richColors
+        closeButton
+      />
+
       <div className="max-w-6xl mx-auto px-4">
         {/* Title */}
-        <h1 className="text-4xl font-bold mb-6 text-gray-900">
+        <h1 className="text-4xl font-bold mb-6 text-slate-900">
           Dashboard
         </h1>
 
@@ -162,7 +205,14 @@ const DashboardPage = () => {
 
               {/* Buttons */}
               <div className="flex gap-3 mt-6">
-                <UpdateBookingModal booking={booking} />
+                {/* UPDATE BUTTON */}
+                <div
+                  onClick={handleUpdateToast}
+                >
+                  <UpdateBookingModal
+                    booking={booking}
+                  />
+                </div>
 
                 {/* DELETE MODAL */}
                 <Modal>

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { authClient } from "@/lib/auth-client";
+import { toast } from "react-toastify";
 
 const BookAppointmentModal = ({
   isOpen,
@@ -50,7 +51,16 @@ const BookAppointmentModal = ({
     e.preventDefault();
 
     if (!patientName || !gender || !phone || !date || !time) {
-      alert("Please fill all required fields");
+
+      toast.error("Please fill all required fields!", {
+        style: {
+          background: "#fef2f2",
+          color: "#991b1b",
+          border: "1px solid #fecaca",
+          borderRadius: "14px",
+        },
+      });
+
       return;
     }
 
@@ -86,7 +96,16 @@ const BookAppointmentModal = ({
       console.log(data);
 
       if (data.insertedId) {
-        alert("Appointment booked successfully!");
+
+        // SUCCESS TOAST
+        toast.success("Appointment booked successfully!", {
+          style: {
+            background: "#ecfeff",
+            color: "#0f172a",
+            border: "1px solid #a5f3fc",
+            borderRadius: "14px",
+          },
+        });
 
         onSubmit?.(bookingData);
 
@@ -95,8 +114,18 @@ const BookAppointmentModal = ({
       }
 
     } catch (error) {
+
       console.log(error);
-      alert("Something went wrong!");
+
+      // ERROR TOAST
+      toast.error("Something went wrong!", {
+        style: {
+          background: "#fef2f2",
+          color: "#991b1b",
+          border: "1px solid #fecaca",
+          borderRadius: "14px",
+        },
+      });
     }
   };
 
