@@ -4,6 +4,12 @@ import TopRatedDoc from "@/components/TopRatedDoc";
 import WhyChooseUs from "@/components/WhyChooseUs";
 import Image from "next/image";
 
+export const metadata = {
+  title: "Home | DocAppoint",
+  description:
+    "Browse available doctors and book appointments easily.",
+};
+
 export default function Home() {
   return (
     <div>

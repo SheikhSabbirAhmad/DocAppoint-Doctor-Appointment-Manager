@@ -2,6 +2,12 @@ import DoctorCard from "@/components/DoctorCard";
 import Category from "@/components/Category";
 import DoctorSearch from "@/components/DoctorSearch";
 
+export const metadata = {
+  title: "All-Appointments | DocAppoint",
+  description:
+    "Browse available doctors and book appointments easily.",
+};
+
 const AllAppointmentsPage = async ({ searchParams }) => {
   const params = await searchParams;
 

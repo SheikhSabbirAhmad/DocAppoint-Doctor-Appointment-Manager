@@ -19,6 +19,8 @@ import { toast, Toaster } from "sonner";
 
 import UpdateBookingModal from "@/components/UpdateBookingModal";
 
+
+
 const DashboardPage = () => {
   const [bookings, setBookings] = useState([]);
   const [selectedBooking, setSelectedBooking] = useState(null);

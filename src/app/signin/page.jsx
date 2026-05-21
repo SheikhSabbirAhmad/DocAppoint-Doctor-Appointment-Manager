@@ -20,6 +20,8 @@ import { toast } from "react-toastify";
 import Lottie from "lottie-react";
 import animationData from "@/lottie/docappoint.json";
 
+
+
 export default function SignInPage() {
 
   const [email, setEmail] = useState("");
