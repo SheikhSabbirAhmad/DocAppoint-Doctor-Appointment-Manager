@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import {
   FaFacebookF,
   FaInstagram,
@@ -22,9 +23,21 @@ const Footer = () => {
 
           {/* BRAND */}
           <div className="space-y-4">
-            <h2 className="text-2xl font-bold tracking-wide text-[#0f766e]">
-              DocAppoint
-            </h2>
+               {/* Logo */}
+                      <div className="flex items-center gap-2">
+                        <Image
+                          src="/NavbarImg2.png"
+                          alt="logo"
+                          width={30}
+                          height={30}
+                          className="rounded-md"
+                        />
+                     <Link href={"/"}>
+                           <h2 className="text-2xl font-bold tracking-wide text-[#0f766e]">
+                          DocAppoint
+                        </h2>
+                     </Link>
+                      </div>
 
             <p className="text-sm text-gray-600 leading-relaxed">
               DocAppoint is a modern doctor appointment manager that helps
@@ -35,7 +48,7 @@ const Footer = () => {
 
           {/* ABOUT */}
           <div>
-            <h3 className="text-sm font-semibold mb-4 text-[#0f766e]">
+            <h3 className="text-md font-semibold mb-4 text-[#0f766e]">
               About
             </h3>
 
@@ -48,7 +61,7 @@ const Footer = () => {
 
           {/* CONTACT */}
           <div className="space-y-4">
-            <h3 className="text-sm font-semibold text-[#0f766e]">
+            <h3 className="text-md font-semibold text-[#0f766e]">
               Contact
             </h3>
 
@@ -74,7 +87,7 @@ const Footer = () => {
 
           {/* FOLLOW */}
           <div className="space-y-4">
-            <h3 className="text-sm font-semibold text-[#0f766e]">
+            <h3 className="text-md font-semibold text-[#0f766e]">
               Follow Us
             </h3>
 
