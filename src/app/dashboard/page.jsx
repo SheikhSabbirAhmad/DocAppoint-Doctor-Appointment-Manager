@@ -18,6 +18,7 @@ import { Modal, Button } from "@heroui/react";
 import { toast, Toaster } from "sonner";
 
 import UpdateBookingModal from "@/components/UpdateBookingModal";
+import Image from "next/image";
 
 
 
@@ -102,10 +103,20 @@ const DashboardPage = () => {
       <Toaster position="top-right" richColors closeButton />
 
       <div className="max-w-6xl mx-auto px-4">
-        {/* Title */}
-        <h1 className="text-4xl font-bold mb-6 text-slate-900">
+      <div className="flex gap-1 mb-5">
+          {/* Title */}
+        <h1 className="text-4xl font-bold text-slate-900">
           Dashboard
         </h1>
+
+        <Image
+          src="/NavbarImg3.png"
+          alt="logo"
+          width={30}
+          height={30}
+          className="rounded-md"
+        />
+      </div>
 
         {/* Tabs */}
         <div className="flex gap-2 bg-gray-200 p-1 rounded-full w-fit mb-8">
