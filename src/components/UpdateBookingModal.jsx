@@ -12,8 +12,15 @@ import {
 import { Pencil } from "lucide-react";
 import { toast } from "sonner";
 import { authClient } from "@/lib/auth-client";
+import { useEffect, useState } from "react";
 
 const UpdateBookingModal = ({ booking }) => {
+
+  const [patientName, setPatientName] = useState("");
+  const [date, setDate] = useState("");
+  const [time, setTime] = useState("");
+  const [reason, setReason] = useState("");
+
   // TIME FIX
   const formatTime = (time) => {
     if (!time) return "";
@@ -29,28 +36,30 @@ const UpdateBookingModal = ({ booking }) => {
     const [clock, modifier] = time.split(" ");
     let [hours, minutes] = clock.split(":");
 
-    if (hours === "12") {
-      hours = "00";
-    }
-
-    if (modifier === "PM") {
-      hours = parseInt(hours, 10) + 12;
-    }
+    if (hours === "12") hours = "00";
+    if (modifier === "PM") hours = parseInt(hours, 10) + 12;
 
     return `${hours.toString().padStart(2, "0")}:${minutes}`;
   };
 
+  useEffect(() => {
+    if (booking) {
+      setPatientName(booking.patientName || "");
+      setDate(booking.date || "");
+      setTime(formatTime(booking.time) || "");
+      setReason(booking.reason || "");
+    }
+  }, [booking]);
+
   const handleUpdate = async (e) => {
     e.preventDefault();
 
-    const form = e.target;
-
     const updatedBooking = {
       doctorName: booking.doctorName,
-      patientName: form.patientName.value,
-      date: form.date.value,
-      time: form.time.value,
-      reason: form.reason.value,
+      patientName,
+      date,
+      time,
+      reason,
     };
 
     try {
@@ -71,8 +80,6 @@ const UpdateBookingModal = ({ booking }) => {
 
       const data = await res.json();
 
-      console.log("UPDATE RESPONSE:", data);
-
       if (data.modifiedCount > 0) {
         toast.success("Appointment updated successfully!", {
           style: {
@@ -90,8 +97,6 @@ const UpdateBookingModal = ({ booking }) => {
         toast.error("No changes were made!");
       }
     } catch (error) {
-      console.log("UPDATE ERROR:", error);
-
       toast.error("Something went wrong!", {
         style: {
           background: "#fef2f2",
@@ -136,7 +141,6 @@ const UpdateBookingModal = ({ booking }) => {
                   <TextField className="w-full">
                     <Label className="mb-2 font-semibold">Doctor</Label>
                     <Input
-                      name="doctorName"
                       value={booking.doctorName}
                       readOnly
                       disabled
@@ -148,8 +152,8 @@ const UpdateBookingModal = ({ booking }) => {
                   <TextField className="w-full">
                     <Label className="mb-2 font-semibold">Patient Name</Label>
                     <Input
-                      name="patientName"
-                      defaultValue={booking.patientName}
+                      value={patientName}
+                      onChange={(e) => setPatientName(e.target.value)}
                       placeholder="Patient full name"
                     />
                   </TextField>
@@ -160,8 +164,8 @@ const UpdateBookingModal = ({ booking }) => {
                       <Label className="mb-2 font-semibold">Date</Label>
                       <Input
                         type="date"
-                        name="date"
-                        defaultValue={booking.date}
+                        value={date}
+                        onChange={(e) => setDate(e.target.value)}
                       />
                     </TextField>
 
@@ -169,18 +173,20 @@ const UpdateBookingModal = ({ booking }) => {
                       <Label className="mb-2 font-semibold">Time</Label>
                       <Input
                         type="time"
-                        name="time"
-                        defaultValue={formatTime(booking.time)}
+                        value={time}
+                        onChange={(e) => setTime(e.target.value)}
                       />
                     </TextField>
                   </div>
 
                   {/* Reason */}
                   <TextField className="w-full">
-                    <Label className="mb-2 font-semibold">Reason (Optional)</Label>
+                    <Label className="mb-2 font-semibold">
+                      Reason (Optional)
+                    </Label>
                     <Input
-                      name="reason"
-                      defaultValue={booking.reason}
+                      value={reason}
+                      onChange={(e) => setReason(e.target.value)}
                       placeholder="Brief reason for visit"
                     />
                   </TextField>
