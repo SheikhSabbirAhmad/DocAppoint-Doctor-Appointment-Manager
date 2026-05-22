@@ -1,16 +1,31 @@
 "use client";
 
 import { authClient } from "@/lib/auth-client";
-import { Button, Input, Label, Modal, Surface, TextField } from "@heroui/react";
+import {
+  Button,
+  Input,
+  Label,
+  Modal,
+  Surface,
+  TextField,
+} from "@heroui/react";
 import { BiEdit, BiUser } from "react-icons/bi";
 import { toast } from "react-toastify";
+import { useEffect, useState } from "react";
 
-export function UpdateUserModal() {
+export function UpdateUserModal({ user }) {
+  const [name, setName] = useState("");
+  const [image, setImage] = useState("");
+
+  useEffect(() => {
+    if (user) {
+      setName(user.name || "");
+      setImage(user.image || "");
+    }
+  }, [user]);
+
   const onSubmit = async (e) => {
     e.preventDefault();
-
-    const name = e.target.name.value;
-    const image = e.target.image.value;
 
     try {
       await authClient.updateUser({
@@ -45,14 +60,23 @@ export function UpdateUserModal() {
             <Modal.Body className="p-6">
               <Surface variant="default">
                 <form onSubmit={onSubmit} className="flex flex-col gap-4">
-                  <TextField className="w-full" name="name" type="text">
+
+                  <TextField className="w-full">
                     <Label>Name</Label>
-                    <Input placeholder="Enter your name" />
+                    <Input
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      placeholder="Enter your name"
+                    />
                   </TextField>
 
-                  <TextField className="w-full" name="image" type="url">
+                  <TextField className="w-full">
                     <Label>Image URL</Label>
-                    <Input placeholder="Image URL" />
+                    <Input
+                      value={image}
+                      onChange={(e) => setImage(e.target.value)}
+                      placeholder="Image URL"
+                    />
                   </TextField>
 
                   <Modal.Footer>
